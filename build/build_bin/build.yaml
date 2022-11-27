@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  game:
+    container_name: game
+    image:  getourneau/alpine-golang-bash:latest
+    environment:
+      - GODEBUG=netdns=go
+    working_dir: /go/src/github.com/game/server
+    volumes:
+      - ../../server:/go/src/github.com/game/server
+    command: go build -o game

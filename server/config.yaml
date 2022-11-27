@@ -1,0 +1,34 @@
+# Server's listening port (default: 8888)
+port: 8888
+
+db:
+  type: mysql #the db type
+  address: localhost #the db address
+  port: 3306
+  user: root #the db user
+  password: $Root123123 #the db password
+  pagesize: 1
+
+default:
+  expirationTime: 1800
+  pushIntervalTime: 2
+  syncInvokeTime: 180
+  getDataFromWisChainTime: 50
+  judgeReconnectTime: 300
+  contextTime: 5
+  machineSecret: 93A8AA8C0D267663
+  wordRule: ","
+  wordLength: 3000
+  wordFormatRule: "\n|\r|\" \""
+
+config:
+  adminUser: root
+  adminPassWord: 88888888
+
+crypto:
+  family: ecdsa
+  algorithm: P256-SHA256
+  hash: SHA2-256
+
+
+

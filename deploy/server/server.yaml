@@ -1,0 +1,50 @@
+version: '3'
+services:
+  game-server:
+    container_name: game-server
+    image: game:latest
+    restart: always
+    working_dir: /opt/gopath/src/github.com/gopath/game/server
+    command: ./game
+    ports:
+      - 8888:8888
+    environment:
+      #server启动端口
+      - SERVER_PORT=8888 # Server's listening port (default: 8888)
+      #数据库配置
+      - SERVER_DB_TYPE=mysql # 默认数据库mysql
+      - SERVER_DB_ADDRESS=game-mysql #the db address
+      - SERVER_DB_PORT=3306
+      - SERVER_DB_USER=root #the db user
+      - SERVER_DB_PASSWORD=game2022 #the db password
+      #注册用户配置
+      - SERVER_CONFIG_ADMINUSER=root
+      - SERVER_CONFIG_PASSWORD=88888888
+      #default
+      - SERVER_DEFAULT_EXPIRATIONTIME=1800
+      - SERVER_DEFAULT_PUSHINTERVALTIME=2
+      - SERVER_DEFAULT_SYNCINVOKETIME=180
+      - SERVER_DEFAULT_GETDATAFROMWISCHAINTIME=180
+      - SERVER_DEFAULT_JUDGERECONNECTTIME=300
+      - SERVER_DEFAULT_CONTEXTTIME=5
+      - SERVER_DEFAULT_MACHINESECRET=93A8AA8C0D267663
+      - SERVER_DEFAULT_WORDRULE=，
+      - SERVER_DEFAULT_WORDLENGTH=3000
+      - SERVER_DEFAULT_WORDFORMATRULE=\n|\r|\"\"
+      #pulsar
+      #crypto
+      - SERVER_CRYPTO_FAMILY=ecdsa
+      - SERVER_CRYPTO_ALGORITHM=P256-SHA256
+      - SERVER_CRYPTO_HASH=SHA2-256
+    networks:
+      - outside
+    volumes:
+      # 配置文件路径映射
+      - /etc/localtime:/etc/localtime:ro #时间
+      - ./log/game.log:/opt/gopath/src/github.com/gopath/game/server/game.log
+    stdin_open: true
+    tty: true
+networks:
+  outside:
+    external:
+      name: game
