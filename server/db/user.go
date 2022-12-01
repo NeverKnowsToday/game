@@ -18,7 +18,6 @@ type User struct {
 	PhoneNum  string    `json:"phone_num"`
 	Company   string    `json:"company"`
 	Type      int       `json:"type"` //用户类型(0:管理员， 1:普通用户)
-//	CAPath    string    `json:"ca_path"`
 	IsValid   bool      `json:"is_valid"`
 }
 

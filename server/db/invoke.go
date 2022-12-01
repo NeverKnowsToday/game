@@ -5,6 +5,9 @@ import (
 	"github.com/game/server/database"
 	"time"
 )
+//var (
+//	Db     *database.MyDb
+//)
 
 //操作表
 type Invoke struct {
@@ -16,8 +19,8 @@ type Invoke struct {
 	Room      int       `json:"room"`
 }
 
-func CheckInvoke(invoke *Invoke) error {
-	return database.Model(Db, &Invoke{}).CheckExist("\"name\" = ?", invoke.Name)
+func CheckInvoke(name string) error {
+	return database.Model(Db, &Invoke{}).CheckExist("\"name\" = ?", name)
 }
 
 func InsertInvoke(invoke *Invoke) error {
@@ -36,7 +39,6 @@ func GetInvokeByName(name string) (*Invoke, error) {
 	return &invoke, nil
 }
 
-// GetChannelByUUID 通过netuuid, uuid查询通道信息
 func GetInvokesByRoom(room int) ([]*Invoke, error) {
 	var invoke []*Invoke
 	err := database.Model(Db, &Invoke{}).FilterBy("room", room).Find(&invoke)
@@ -45,6 +47,16 @@ func GetInvokesByRoom(room int) ([]*Invoke, error) {
 	}
 	return invoke, nil
 }
+
+// UpdateChannel 更新状态
+func UpdateInvokePosByname(name string, pos int) error {
+	return database.Model(Db, &Invoke{}).Where("\"name\" = ?", name).Update("current_pos", pos)
+}
+// UpdateChannel 更新状态
+func UpdateInvokeWinnerByname(name string, state bool) error {
+	return database.Model(Db, &Invoke{}).Where("\"name\" = ?", name).Update("is_win", state)
+}
+
 
 func DeleteInvokeByName(name string) error {
 	if name == "" {

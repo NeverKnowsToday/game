@@ -7,7 +7,7 @@ public:
 	用户及手机验证码		0100
 	数据库相关       	0200
 	SDK相关       		0300
-    区块链浏览器相关     0400
+    业务相关     0400
 
 */
 
@@ -42,32 +42,9 @@ const (
 	E_DeleteFailed = "0200-0003" //删除数据库失败
 	E_UpdateFailed = "0200-0004" //更新数据库失败
 
-	// SDK相关
-	E_ReadUserKeyPairFailed     = "0300-0001" //读取用户证书私钥失败
-	E_SendTxFailed              = "0300-0002" //交易发送失败（连接区块链节点提交交易失败， 需要重新发送）
-	E_InvalidTx                 = "0300-0003" //交易发送失败（智能合约校验未通过）
-	E_EnrollFailed              = "0300-0004" //证书注册失败
-	E_GetBlockHeight            = "0300-0005" //获取区块高度失败
-	E_HandleTxStatus            = "0300-0006" //设置同步发交易时，接收交易信息失败
-	E_QueryFailed               = "0300-0007" //查询交易失败
-	E_InvokeFailed              = "0300-0008" //执行交易失败
-	E_ChannelNotExisted         = "0300-0009" //通道不存在或没有和相应组织绑定
-	E_ChainCodeNotExisted       = "0300-0010" //智能合约不存在
-	E_PeerNotFind               = "0300-0011" //未找到实例化了智能合约的peer
-	E_OrdererNotFind            = "0300-0012" //未找到可用的orderer
-	E_FunctionCanNotBeNull      = "0300-0013" //function不能为空
-	E_ChannelCanNotBeNull       = "0300-0014" //channel不能为空
-	E_FunctionIsInvalid         = "0300-0015" //function名非法
-	E_EndorsementPolicyFailure  = "0300-0016" //交易背书策略不满足
-	E_ChainCodeIsNotInstantiate = "0300-0017" //智能合约未实例化
-	E_TxIdCanNotBeNull          = "0300-0018" //交易id不能为空
-	E_OrgIsNotInChannel         = "0300-0019" //组织不在通道中
+	// 业务相关
+	E_NotExistUser     			= "0300-0001" //不存在该用户
 
-	// 监听通道相关
-	E_ChannelListeningCreateFailed = "0400-0001" //监听通道创建失败
-	E_ChannelListeningUpdateFailed = "0400-0002" //监听通道更新失败
-	E_ChannelListeningDeleteFailed = "0400-0003" //监听通道删除失败
-	E_ChannelListeningGetFailed    = "0400-0004" //监听通道查询失败
 
 	//请求处理失败
 	E_IoReadError        = "0500-0001" //io读取失败

@@ -44,7 +44,7 @@ func createRouter() *gin.Engine {
 			// 操作游戏
 			game.Use(handler.Filter())
 			//game.POST("/start", handler.Start)
-			game.POST("/invoke", handler.Invoke)
+			game.GET("/invoke", handler.Invoke)
 
 		}
 
