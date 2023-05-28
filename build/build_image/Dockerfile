@@ -4,7 +4,7 @@ MAINTAINER <shilixingchen>
 
 ENV GO111MODULE="off"
 
-ENV BUILDPATH=github.com/gopath/game
+ENV BUILDPATH=github.com/game
 
 RUN mkdir -p /go/src/${BUILDPATH}
 
@@ -17,8 +17,8 @@ RUN go build -o game
 # 构建运行镜像
 FROM alpine:latest
 
-ENV WORKPATH=/opt/gopath/src/github.com/game/server
-ENV BUILDPATH=/go/src/github.com/gopath/game/server
+ENV WORKPATH=/opt/src/github.com/game/server
+ENV BUILDPATH=/go/src/github.com/game/server
 
 RUN mkdir -p ${WORKPATH}
 

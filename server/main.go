@@ -1,11 +1,9 @@
 package main
 
-import(
+import (
 	"flag"
 	"fmt"
-	"github.com/game/server/common"
 	"github.com/game/server/config"
-	"github.com/game/server/db"
 	"github.com/game/server/logger/logging"
 	"github.com/game/server/router"
 	"runtime"
@@ -40,17 +38,17 @@ func main(){
 	if err != nil {
 		panic(err)
 	}
-	err = common.InitErrorCue("./ErrorCue.json")
-	if err != nil {
-		panic(err)
-	}
+	//err = common.InitErrorCue("./ErrorCue.json")
+	//if err != nil {
+	//	panic(err)
+	//}
 	logger.Debugf("config parser :===============test")
 
 
 	//初始化数据库
-	if err = db.InitDb(); err != nil {
-		panic(err)
-	}
+	//if err = db.InitDb(); err != nil {
+	//	panic(err)
+	//}
 
 
 
@@ -60,7 +58,9 @@ func main(){
 	r := router.GetRouter()
 
 	// 运行服务
-	address := fmt.Sprintf("0.0.0.0:%d", config.GetServerConfig().Port)
+	//address := fmt.Sprintf("0.0.0.0:%d", config.GetServerConfig().Port)
+
+	address := fmt.Sprintf("127.0.0.1:%d", 8080)
 	r.Run(address)
 
 
