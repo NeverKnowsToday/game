@@ -39,12 +39,14 @@ func createRouter() *gin.Engine {
 			user.GET("/getusers", handler.GetUsers)
 		}
 
-		game := v1.Group("/game")
+		game := v1.Group("/api")
 		{
 			// 操作游戏
-			game.Use(handler.Filter())
+			//game.Use(handler.Filter())
 			//game.POST("/start", handler.Start)
 			game.GET("/invoke", handler.Invoke)
+			game.POST("/insurance/benefit_diff", handler.InsuranceCompare)
+			game.GET("/insurance/excel/list", handler.GetExcelList)
 
 		}
 

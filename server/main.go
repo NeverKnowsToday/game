@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/game/server/config"
+	"github.com/game/server/db"
 	"github.com/game/server/logger/logging"
 	"github.com/game/server/router"
 	"runtime"
@@ -46,9 +47,9 @@ func main(){
 
 
 	//初始化数据库
-	//if err = db.InitDb(); err != nil {
-	//	panic(err)
-	//}
+	if err = db.InitDb(); err != nil {
+		panic(err)
+	}
 
 
 
