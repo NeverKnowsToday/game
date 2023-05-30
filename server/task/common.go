@@ -1,4 +1,19 @@
-package handler
+package task
+
+
+import (
+"github.com/game/server/logger/logging"
+)
+
+var logger = logging.GetLogger("handler", logging.DEFAULT_LEVEL)
+
+
+type InsuranceInfo struct {
+	Age       string   `json:"age"`
+	Total     string   `json:"total"`
+	ProductID []string `json:"product_id"`
+}
+
 
 type InsuranceRes struct {
 	Age       string   `json:"age"`
