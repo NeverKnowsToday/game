@@ -75,15 +75,26 @@ type InputConfig struct {
 	Get               *Get   `json:"get"`
 }
 
-type Set struct {
-	Age   *SetInfo `json:"age"`
-	Total *SetInfo `json:"total"`
-}
 
 type SetInfo struct {
+	Set *Set `json:"set"`
+}
+
+type Set struct {
+	Age   *SetBase `json:"age"`
+	Total *SetBase `json:"total"`
+}
+
+type SetBase struct {
 	Value    string `json:"value"`
 	Location string `json:"location"`
 	Sheet    string `json:"sheet"`
+}
+
+
+
+type GetInfo struct {
+	Get *Get `json:"get"`
 }
 
 type Get struct {

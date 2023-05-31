@@ -61,11 +61,11 @@ type InputConfig struct {
 }
 
 type Set struct {
-	Age   *SetInfo `json:"age"`
-	Total *SetInfo `json:"total"`
+	Age   *SetBase `json:"age"`
+	Total *SetBase `json:"total"`
 }
 
-type SetInfo struct {
+type SetBase struct {
 	Value    string `json:"value"`
 	Location string `json:"location"`
 	Sheet    string `json:"sheet"`

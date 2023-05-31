@@ -43,24 +43,53 @@ func InsuranceCompare(c *gin.Context) {
 	insuranceOp := task.NewInsuranceOp(taskQueue, c, insuranceInfo)
 	taskQueue.Init(insuranceOp, 5)
 	// 并发执行
+	//ResChan := make(chan *InsurancesInfo, 9)
+
 	for i := 0; i < taskQueue.UnfinishedTaskCnt; i++ {
 		go insuranceOp.RunTask(ctx)
 	}
 
 	insuranceOp.Wg.Wait()
+
+
 	latestRes := make([]*InsurancesInfo, 0)
 	for {
+		tmpInsurancesInfo := &InsurancesInfo{}
 		if value, ok := <-insuranceOp.ResChan; ok {
-			insurancesInfo := value.(InsurancesInfo)
-			latestRes = append(latestRes,&insurancesInfo)
+			switch  value.(type) {
+				case *task.InsurancesInfo :
+					//ch_value := value.([]*ExcelInsurance)
+					//tmpInsurancesInfo.ID =
+					taskInsurancesInfo := value.(*task.InsurancesInfo)
+
+					tmpInsurancesInfo.ProductName = taskInsurancesInfo.ProductName
+					tmpInsurancesInfo.ID = taskInsurancesInfo.ID
+					tmpInsurancesInfo.CompanyName = taskInsurancesInfo.CompanyName
+					//tmpInsurancesInfo.Info = taskInsurancesInfo.Info
+					for _,v := range tmpInsurancesInfo.Info {
+						tmpInsurancesInfo.Info = append(tmpInsurancesInfo.Info, v)
+					}
+					latestRes = append(latestRes,tmpInsurancesInfo)
+
+			default:
+				logger.Infof(fmt.Sprintf("switch  value.(type)= value.(type) not support"))
+				common.ErrorResponse(c, "1111", fmt.Sprintf("switch  value.(type)= value.(type) not support") )
+			}
+
 	    }else{
+			logger.Infof(fmt.Sprintf("value, ok := <-insuranceOp.ResChan; is not ok"))
 			break
 		}
 	}
 
 	close(insuranceOp.ResChan)
 
+	logger.Infof(fmt.Sprintf("len(latestRes) =  %d",len(latestRes)))
+	logger.Infof(fmt.Sprintf("latestRes =  %+v",latestRes))
 
+	for _, v := range latestRes{
+		logger.Infof(fmt.Sprintf("v.ProductName =  %s",v.ProductName))
+	}
 
 
 	common.Response( c, nil, common.E_Success, latestRes)

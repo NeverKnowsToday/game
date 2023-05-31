@@ -7,16 +7,18 @@ import (
 	"github.com/game/server/db"
 	"github.com/game/server/utils/linux"
 	"github.com/gin-gonic/gin"
-	"github.com/hashicorp/go-uuid"
 	"os"
-	"strings"
 	"time"
 )
+
+//var ResChan  chan *InsurancesInfo
+
 
 type InsuranceOp struct {
 	*TaskQueue
 	Ctx   *gin.Context
 	InsuranceInfo InsuranceInfo
+	//ResChan       *InsurancesInfo
 }
 
 func NewInsuranceOp(t *TaskQueue, c *gin.Context, insuranceInfo InsuranceInfo) *InsuranceOp{
@@ -24,6 +26,7 @@ func NewInsuranceOp(t *TaskQueue, c *gin.Context, insuranceInfo InsuranceInfo) *
 		TaskQueue: t,
 		Ctx: c,
 		InsuranceInfo:    insuranceInfo,
+		//ResChan:  make(chan *InsurancesInfo, 9),
 	}
 }
 
@@ -42,58 +45,76 @@ func (op *InsuranceOp)DbpaasRun() error {
 	logger.Infof(fmt.Sprintf("InsuranceOp db excel = %+v ", excel))
 	logger.Infof(fmt.Sprintf("InsuranceOp db  excel.ProductId = %s ", excel.ProductId))
 
+	logger.Infof(fmt.Sprintf("InsuranceOp db excel.SetInfo = %s ", excel.SetInfo))
+	logger.Infof(fmt.Sprintf("InsuranceOp db excel.getInfo = %s ", excel.GetInfo))
 
-	setInfo := new(Set)
-	err = json.Unmarshal([]byte(excel.SetInfo), &setInfo)
+	unmarshalSetInfo := "{" + excel.SetInfo + "}"
+	logger.Infof(fmt.Sprintf("InsuranceOp db unmarshalSetInfo = %s ", unmarshalSetInfo))
+
+	setInfo := new(SetInfo)
+	err = json.Unmarshal([]byte(unmarshalSetInfo), &setInfo)
 	if err != nil {
+		logger.Errorf(fmt.Sprintf("err = json.Unmarshal([]byte(unmarshalSetInfo), &setInfo) %s",err.Error()))
+
 		common.ErrorResponse(op.Ctx, common.E_JsonUnmarshalError, err.Error())
 		return err
 	}
 
 	logger.Infof(fmt.Sprintf("setInfo = %+v", setInfo))
-	logger.Infof(fmt.Sprintf("setInfo.Age.Value = %s", setInfo.Age.Value))
-	logger.Infof(fmt.Sprintf("setInfo.Age.Sheet = %s", setInfo.Age.Sheet))
-	logger.Infof(fmt.Sprintf("setInfo.Age.Location = %s", setInfo.Age.Location))
+	logger.Infof(fmt.Sprintf("setInfo.Set.Age.Value = %s", setInfo.Set.Age.Value))
+	logger.Infof(fmt.Sprintf("setInfo.Set.Age.Sheet = %s", setInfo.Set.Age.Sheet))
+	logger.Infof(fmt.Sprintf("setInfo.Set.Age.Location = %s", setInfo.Set.Age.Location))
 
+	unmarshalGetInfo := "{" + excel.GetInfo + "}"
+	logger.Infof(fmt.Sprintf("InsuranceOp db unmarshalGetInfo = %s ", unmarshalGetInfo))
 
-	getInfo := new(Get)
-	err = json.Unmarshal([]byte(excel.GetInfo), &getInfo)
+	getInfo := GetInfo{
+		Get: &Get{
+			BenefitDiff: &BenefitDiff{},
+		},
+	}
+	err = json.Unmarshal([]byte(unmarshalGetInfo), &getInfo)
 	if err != nil {
+		logger.Errorf(fmt.Sprintf("err = json.Unmarshal([]byte(unmarshalGetInfo), &getInfo) = %s ", err.Error()))
 		common.ErrorResponse(op.Ctx, common.E_JsonUnmarshalError, err.Error())
 		return err
 	}
 
 	logger.Infof(fmt.Sprintf("getInfo = %+v", getInfo))
-	logger.Infof(fmt.Sprintf("getInfo.BenefitDiff.Sheet = %s", getInfo.BenefitDiff.Sheet))
-	logger.Infof(fmt.Sprintf("getInfo.BenefitDiff.Location = %s", getInfo.BenefitDiff.Location))
+	logger.Infof(fmt.Sprintf("getInfo.Get.BenefitDiff.Sheet = %s", getInfo.Get.BenefitDiff.Sheet))
+	logger.Infof(fmt.Sprintf("getInfo.Get.BenefitDiff.Location = %s", getInfo.Get.BenefitDiff.Location))
 
 
-	uid, err := uuid.GenerateRandomBytes(8)
+	//uid, err := uuid.GenerateUUID()
 
-	tempPath := strings.TrimRight(excel.ExcelPath, ".xlsx")
-	tempPath = tempPath + "_" + string(uid) + ".xlsx"
+	//tempPath := strings.TrimRight(excel.ExcelPath, ".xlsx")
+	tempPath := "D:\\app\\gin-backend\\history\\" + excel.ProductId + "_" + excel.ExcelName + ".xlsx"
 	logger.Infof(fmt.Sprintf("tempPath = %s", tempPath))
 
+	logger.Infof(fmt.Sprintf("excel.ExcelPath = %s", excel.ExcelPath))
+
+	//excelPath := strings.Replace(excel.ExcelPath, "\\", "\\\\", -1)
+	logger.Infof(fmt.Sprintf("excelPath = %s", excel.ExcelPath))
 	config := &InputConfig{
 		TaskID:            string(id),
 		ExcelFilePath:     excel.ExcelPath,
 		ExcelFileTempPath: tempPath,
 		Set: &Set{
-			Age: &SetInfo{
-				Value:    setInfo.Age.Value,
-				Location: setInfo.Age.Location,
-				Sheet:    setInfo.Age.Sheet,
+			Age: &SetBase{
+				Value:    setInfo.Set.Age.Value,
+				Location: setInfo.Set.Age.Location,
+				Sheet:    setInfo.Set.Age.Sheet,
 			},
-			Total: &SetInfo{
-				Value:    setInfo.Total.Location,
-				Location: setInfo.Total.Location,
-				Sheet:    setInfo.Total.Sheet,
+			Total: &SetBase{
+				Value:    setInfo.Set.Total.Value,
+				Location: setInfo.Set.Total.Location,
+				Sheet:    setInfo.Set.Total.Sheet,
 			},
 		},
 		Get: &Get{
 			BenefitDiff: &BenefitDiff{
-				Location: getInfo.BenefitDiff.Location,
-				Sheet:    getInfo.BenefitDiff.Sheet,
+				Location: getInfo.Get.BenefitDiff.Location,
+				Sheet:    getInfo.Get.BenefitDiff.Sheet,
 			},
 		},
 	}
@@ -105,8 +126,11 @@ func (op *InsuranceOp)DbpaasRun() error {
 		//logger.Infof("json.Marshal(config) failed")
 	}
 
-	configName := string(uid) + ".conf"
+	configName := excel.ProductId + ".conf"
 	logger.Infof(fmt.Sprintf("configName = %s", configName))
+
+	configPath := "D:/app/gin-backend/" + configName
+	logger.Infof(fmt.Sprintf("configPath = %s", configPath))
 
 	f, err := os.Create(configName)
 	if err != nil {
@@ -124,7 +148,7 @@ func (op *InsuranceOp)DbpaasRun() error {
 
 	fmt.Println("n = ", n)
 
-	configPath := "D:/python/xjw/" + configName
+	//configPath := "D:/python/xjw/" + configName
 	logger.Infof(fmt.Sprintf("configPath = %s", configPath))
 
 	command := "python D:/python/xjw/main.py " + configPath
@@ -142,7 +166,7 @@ func (op *InsuranceOp)DbpaasRun() error {
 		//return execErr
 	}
 
-	fmt.Printf("execOut ====================== = %+v\n", execOut)
+	//fmt.Printf("execOut ====================== = %+v\n", execOut)
 
 	data := execOut
 
@@ -160,12 +184,12 @@ func (op *InsuranceOp)DbpaasRun() error {
 		res_row := &ExcelInsurance{}
 
 		for _, value := range v {
-			fmt.Printf("for _, value := range v================== = %+v\n", value.Name)
-			fmt.Printf("for _, value := range value================== = %+v\n", value.Value)
-
-			if value.Name == "保单年度" {
-				fmt.Printf("**************==================************** = %+v\n", value.Name)
-			}
+			//fmt.Printf("for _, value := range v================== = %+v\n", value.Name)
+			//fmt.Printf("for _, value := range value================== = %+v\n", value.Value)
+			//
+			//if value.Name == "保单年度" {
+			//	fmt.Printf("**************==================************** = %+v\n", value.Name)
+			//}
 			switch value.Name {
 			case "PolicyYear":
 				res_row.PolicyYear = value.Value
@@ -207,7 +231,15 @@ func (op *InsuranceOp)DbpaasRun() error {
 		res = append(res, res_row)
 	}
 
-	op.ResChan <- res
+
+	tmpInsurancesInfo := &InsurancesInfo{
+		ID: excel.ProductId,
+		Info: res,
+		CompanyName: excel.ExcelName,
+		ProductName: excel.ExcelName,
+	}
+
+	op.ResChan <- tmpInsurancesInfo
 
 	return nil
 
