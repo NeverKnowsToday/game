@@ -1,7 +1,6 @@
 package task
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/game/server/common"
@@ -29,81 +28,104 @@ func NewInsuranceOp(t *TaskQueue, c *gin.Context, insuranceInfo InsuranceInfo) *
 }
 
 func (op *InsuranceOp)DbpaasRun() error {
-	id := op.Get().(int)
+	logger.Infof(fmt.Sprintf("InsuranceOp start"))
+
+	id := op.Get().(string)
+	logger.Infof(fmt.Sprintf("InsuranceOp id = %s ", id))
+
 	excel,err := db.GetProductExcelParserByID(id)
 	if err != nil {
 		common.ErrorResponse(op.Ctx, common.E_GetFailed, err.Error())
 		return err
 	}
 
-	setInfo := new(SetInfo)
-	err = json.Unmarshal([]byte(excel.SetInfo), setInfo)
+	logger.Infof(fmt.Sprintf("InsuranceOp db excel = %+v ", excel))
+	logger.Infof(fmt.Sprintf("InsuranceOp db  excel.ProductId = %s ", excel.ProductId))
+
+
+	setInfo := new(Set)
+	err = json.Unmarshal([]byte(excel.SetInfo), &setInfo)
 	if err != nil {
 		common.ErrorResponse(op.Ctx, common.E_JsonUnmarshalError, err.Error())
 		return err
 	}
 
-	getInfo := new(G)
+	logger.Infof(fmt.Sprintf("setInfo = %+v", setInfo))
+	logger.Infof(fmt.Sprintf("setInfo.Age.Value = %s", setInfo.Age.Value))
+	logger.Infof(fmt.Sprintf("setInfo.Age.Sheet = %s", setInfo.Age.Sheet))
+	logger.Infof(fmt.Sprintf("setInfo.Age.Location = %s", setInfo.Age.Location))
 
 
-	err = json.Unmarshal([]byte(excel.SetInfo), setInfo)
+	getInfo := new(Get)
+	err = json.Unmarshal([]byte(excel.GetInfo), &getInfo)
 	if err != nil {
 		common.ErrorResponse(op.Ctx, common.E_JsonUnmarshalError, err.Error())
 		return err
 	}
 
+	logger.Infof(fmt.Sprintf("getInfo = %+v", getInfo))
+	logger.Infof(fmt.Sprintf("getInfo.BenefitDiff.Sheet = %s", getInfo.BenefitDiff.Sheet))
+	logger.Infof(fmt.Sprintf("getInfo.BenefitDiff.Location = %s", getInfo.BenefitDiff.Location))
 
 
 	uid, err := uuid.GenerateRandomBytes(8)
 
 	tempPath := strings.TrimRight(excel.ExcelPath, ".xlsx")
 	tempPath = tempPath + "_" + string(uid) + ".xlsx"
+	logger.Infof(fmt.Sprintf("tempPath = %s", tempPath))
+
 	config := &InputConfig{
 		TaskID:            string(id),
 		ExcelFilePath:     excel.ExcelPath,
 		ExcelFileTempPath: tempPath,
 		Set: &Set{
 			Age: &SetInfo{
-				Value:    "39",
-				Location: "F12",
-				Sheet:    "资料输入",
+				Value:    setInfo.Age.Value,
+				Location: setInfo.Age.Location,
+				Sheet:    setInfo.Age.Sheet,
 			},
 			Total: &SetInfo{
-				Value:    "180000",
-				Location: "H15",
-				Sheet:    "资料输入",
+				Value:    setInfo.Total.Location,
+				Location: setInfo.Total.Location,
+				Sheet:    setInfo.Total.Sheet,
 			},
 		},
 		Get: &Get{
 			BenefitDiff: &BenefitDiff{
-				Location: "A8:Q114",
-				Sheet:    "利益演示",
+				Location: getInfo.BenefitDiff.Location,
+				Sheet:    getInfo.BenefitDiff.Sheet,
 			},
 		},
 	}
 
 	configByte, err := json.Marshal(config)
 	if err != nil {
-		logger.Infof("json.Marshal(config) failed")
+		logger.Infof(fmt.Sprintf("json.Marshal(config) failed = %s", err.Error()))
+
+		//logger.Infof("json.Marshal(config) failed")
 	}
 
 	configName := string(uid) + ".conf"
+	logger.Infof(fmt.Sprintf("configName = %s", configName))
+
 	f, err := os.Create(configName)
 	if err != nil {
-		logger.Infof("create config failed")
+		logger.Infof(fmt.Sprintf("create config failed = %s", err.Error()))
+
+	//	logger.Infof("create config failed")
 
 	}
 	defer f.Close()
 
 	n, err := f.WriteString(string(configByte))
 	if err != nil {
-		logger.Infof("f.WriteString(string(configByte)) failed")
-
+		logger.Infof(fmt.Sprintf("f.WriteString(string(configByte)) failed err = %s", err.Error()))
 	}
 
 	fmt.Println("n = ", n)
 
 	configPath := "D:/python/xjw/" + configName
+	logger.Infof(fmt.Sprintf("configPath = %s", configPath))
 
 	command := "python D:/python/xjw/main.py " + configPath
 	timeout := time.Duration(20)

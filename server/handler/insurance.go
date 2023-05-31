@@ -2,7 +2,9 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"github.com/game/server/common"
+	"github.com/game/server/db"
 	"github.com/game/server/task"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +17,7 @@ func InsuranceCompare(c *gin.Context) {
 	//	return
 	//}
 
-	logger.Infof("start api InsuranceCompare")
+	logger.Infof(fmt.Sprintf("start api InsuranceCompare"))
 
 
 	var insuranceRes InsuranceRes
@@ -56,10 +58,13 @@ func InsuranceCompare(c *gin.Context) {
 		}
 	}
 
+	close(insuranceOp.ResChan)
+
 
 
 
 	common.Response( c, nil, common.E_Success, latestRes)
+	logger.Infof(fmt.Sprintf("end api InsuranceCompare"))
 //
 //	config := &InputConfig{
 //		TaskID:            insuranceInfo.ProductID[0],
@@ -214,23 +219,23 @@ func InsuranceCompare(c *gin.Context) {
 //	latestRes = append(latestRes, insuranceInfo1, insuranceInfo2, insuranceInfo3)
 //
 //	common.Response( c, nil, common.E_Success, latestRes)
-//}
-//
-//
-//func GetExcelList(c *gin.Context){
-//	logger.Infof("start api GetExcelList")
-//
-//	excelList, err := db.GetProductExcelParsers()
-//	if err != nil {
-//		common.ErrorResponse(c, common.E_GetFailed, err.Error())
-//		return
-//	}
-//
-//	for k, v := range excelList {
-//		logger.Infof(fmt.Sprintf("start api GetExcelList[%d] = %+v", k, v))
-//		logger.Infof(fmt.Sprintf("start api GetExcelList[%d] = %s", k, v.ExcelPath))
-//	}
-//
-//	common.Response( c, nil, common.E_Success, excelList)
+}
+
+
+func GetExcelList(c *gin.Context){
+	logger.Infof("start api GetExcelList")
+
+	excelList, err := db.GetProductExcelParsers()
+	if err != nil {
+		common.ErrorResponse(c, common.E_GetFailed, err.Error())
+		return
+	}
+
+	for k, v := range excelList {
+		logger.Infof(fmt.Sprintf("start api GetExcelList[%d] = %+v", k, v))
+		logger.Infof(fmt.Sprintf("start api GetExcelList[%d] = %s", k, v.ExcelPath))
+	}
+
+	common.Response( c, nil, common.E_Success, excelList)
 
 }

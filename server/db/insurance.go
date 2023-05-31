@@ -33,9 +33,9 @@ func GetProductExcelParsers() ([]*ProductExcelParser, error) {
 	return productExcelParser, nil
 }
 
-func GetProductExcelParserByID(id int) (*ProductExcelParser, error) {
+func GetProductExcelParserByID(productID string) (*ProductExcelParser, error) {
 	productExcelParser := new(ProductExcelParser)
-	err := database.Model(Db, &ProductExcelParser{}).Find(&productExcelParser)
+	err := database.Model(Db, &ProductExcelParser{}).FilterBy("product_id", productID).Find(&productExcelParser)
 	if err != nil {
 		return nil, err
 	}
