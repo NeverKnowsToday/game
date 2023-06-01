@@ -88,7 +88,7 @@ func (op *InsuranceOp)DbpaasRun() error {
 	//uid, err := uuid.GenerateUUID()
 
 	//tempPath := strings.TrimRight(excel.ExcelPath, ".xlsx")
-	tempPath := "D:\\app\\gin-backend\\history\\" + excel.ProductId + "_" + excel.ExcelName + ".xlsx"
+	tempPath := "D:\\app\\gin-backend\\history\\" + excel.ProductId + "_" + excel.ExcelName
 	logger.Infof(fmt.Sprintf("tempPath = %s", tempPath))
 
 	logger.Infof(fmt.Sprintf("excel.ExcelPath = %s", excel.ExcelPath))
@@ -101,12 +101,12 @@ func (op *InsuranceOp)DbpaasRun() error {
 		ExcelFileTempPath: tempPath,
 		Set: &Set{
 			Age: &SetBase{
-				Value:    setInfo.Set.Age.Value,
+				Value:    op.InsuranceInfo.Age,
 				Location: setInfo.Set.Age.Location,
 				Sheet:    setInfo.Set.Age.Sheet,
 			},
 			Total: &SetBase{
-				Value:    setInfo.Set.Total.Value,
+				Value:    op.InsuranceInfo.Total,
 				Location: setInfo.Set.Total.Location,
 				Sheet:    setInfo.Set.Total.Sheet,
 			},
@@ -235,8 +235,8 @@ func (op *InsuranceOp)DbpaasRun() error {
 	tmpInsurancesInfo := &InsurancesInfo{
 		ID: excel.ProductId,
 		Info: res,
-		CompanyName: excel.ExcelName,
-		ProductName: excel.ExcelName,
+		CompanyName: excel.Company,
+		ProductName: excel.Product,
 	}
 
 	op.ResChan <- tmpInsurancesInfo
