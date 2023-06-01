@@ -23,24 +23,42 @@ type InsuranceRes struct {
 
 
 type ExcelInsurance struct {
-	PolicyYear                                                                          float32 // 保单年度
-	AgeAtTheEndOfPolicyYear                                                             float32 // 保单年度末年龄
-	PremiumPaymentInTheYearBeforePolicyReduction                                        float32 // 减保前年交保险费
-	AccumulatedPremiumsBeforePolicyReduction                                            float32 // 减保前累计保险费
-	BasicSumInsuredForTheYearBeforePolicyReduction                                      float32 // 减保前年度基本保额
-	EffectiveSumInsuredForTheYearBeforePolicyReduction                                  float32 // 减保前年度有效保额
-	DeathOrTotalDisabilityInsuranceBenefitsAtTheEndOfThePolicyYearBeforePolicyReduction float32 // 减保前保单年度末身故或全残保险金
-	CashValueAtTheEndOfThePolicyYearBeforePolicyReduction                               float32 // 减保前保单年度末现金价值
-	PolicyYearEndReductionAmountOptionalEntryColumn                                     float32 // 保单年度末减保金额（可选输入列）
-	DecreaseAmountOfBasicSumInsuredAtTheEndOfThePolicyYear                              float32 // 保单年度末基本保额减少额度
-	CumulativeReductionAmountAtTheEndOfThePolicyYear                                    float32 // 保单年度末累计减保金额
-	AnnualPremiumPaymentAfterPolicyReduction                                            float32 // 减保后年交保险费
-	AccumulatedPremiumsAfterPolicyReduction                                             float32 // 减保后累计保险费
-	AnnualBasicInsuranceAmountAfterPolicyReduction                                      float32 // 减保后年度基本保额
-	AnnualEffectiveInsuredAmountAfterPolicyReduction                                    float32 // 减保后年度有效保额
-	DeathOrTotalDisabilityInsuranceBenefittTheEndOfThePolicyYearAfterPolicyReduction    float32 // 减保后保单年度末身故或全残保险金
-	CashValueAtTheEndOfThePolicyYearAfterPolicyReduction                                float32 // 减保后保单年度末现金价值
+	PY float32 // 保单年度
+	AATEOPY float32 // 保单年度末年龄
+	PPITYBPR float32 // 减保前年交保险费
+	APBPR float32 // 减保前累计保险费
+	BSIFTYBPR float32 // 减保前年度基本保额
+	ESIFTYBPR float32 // 减保前年度有效保额
+	DOTDIBATEOTPYBPR float32 // 减保前保单年度末身故或全残保险金
+	CVATEOTPYBPR float32 // 减保前保单年度末现金价值
+	PYERAOEC float32 // 保单年度末减保金额（可选输入列）
+	DAOBSIATEOTPY float32 // 保单年度末基本保额减少额度
+	CRAATEOTPY float32 // 保单年度末累计减保金额
+	APPAPR float32 // 减保后年交保险费
+	APAPR float32 // 减保后累计保险费
+	ABIAAPR float32 // 减保后年度基本保额
+	AEIAAPR float32 // 减保后年度有效保额
+	DOTDIBTEOTPYAPR float32 // 减保后保单年度末身故或全残保险金
+	CVATEOTPYAPR float32 // 减保后保单年度末现金价值
 }
+//
+//"保单年度": "PY",
+//"保单年度末年龄": "AATEOPY",
+//"减保前年交保险费": "PPITYBPR",
+//"减保前累计保险费": " APBPR",
+//"减保前年度基本保额": "BSIFTYBPR",
+//"减保前年度有效保额": "ESIFTYBPR",
+//"减保前保单年度末身故或全残保险金": "DOTDIBATEOTPYBPR",
+//"减保前保单年度末现金价值": "CVATEOTPYBPR",
+//"保单年度末减保金额（可选输入列）": "PYERAOEC",
+//"保单年度末基本保额减少额度": "DAOBSIATEOTPY",
+//"保单年度末累计减保金额": "CRAATEOTPY",
+//"减保后年交保险费": "APPAPR",
+//"减保后累计保险费": "APAPR",
+//"减保后年度基本保额": "ABIAAPR",
+//"减保后年度有效保额": "AEIAAPR",
+//"减保后保单年度末身故或全残保险金": "DOTDIBTEOTPYAPR",
+//"减保后保单年度末现金价值": "CVATEOTPYAPR",
 
 // 保单年度
 // 保单年度末年龄
