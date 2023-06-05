@@ -73,33 +73,33 @@ type InsuranceRes struct {
 //	ProductName string
 //}
 
-type InputConfig struct {
-	TaskID            string `json:"task_id"`
-	ExcelFilePath     string `json:"excel_file_path"`
-	ExcelFileTempPath string `json:"excel_file_temp_path"`
-	Set               *Set   `json:"set"`
-	Get               *Get   `json:"get"`
-}
+//type InputConfig struct {
+//	TaskID            string `json:"task_id"`
+//	ExcelFilePath     string `json:"excel_file_path"`
+//	ExcelFileTempPath string `json:"excel_file_temp_path"`
+//	Set               *Set   `json:"set"`
+//	Get               *Get   `json:"get"`
+//}
 
-type Set struct {
-	Age   *SetBase `json:"age"`
-	Total *SetBase `json:"total"`
-}
+//type Set struct {
+//	Age   *SetBase `json:"age"`
+//	Total *SetBase `json:"total"`
+//}
 
-type SetBase struct {
-	Value    string `json:"value"`
-	Location string `json:"location"`
-	Sheet    string `json:"sheet"`
-}
+//type SetBase struct {
+//	Value    string `json:"value"`
+//	Location string `json:"location"`
+//	Sheet    string `json:"sheet"`
+//}
 
-type Get struct {
-	BenefitDiff *BenefitDiff `json:"benefit_diff"`
-}
+//type Get struct {
+//	BenefitDiff *BenefitDiff `json:"benefit_diff"`
+//}
 
-type BenefitDiff struct {
-	Location string `json:"location"`
-	Sheet    string `json:"sheet"`
-}
+//type BenefitDiff struct {
+//	Location string `json:"location"`
+//	Sheet    string `json:"sheet"`
+//}
 
 // {
 //     "task_id": "123",
@@ -124,33 +124,33 @@ type BenefitDiff struct {
 //         }
 //     }
 // }
-
-type InsurancesResFromPython struct {
-	ErrorMessage string                `json:"error_message"`
-	ExcelData    *InsurancesFromPython `json:"excel_data"`
-}
-
-type InsurancesFromPython struct {
-	TaskID         string              `json:"task_id"`
-	SetInfo        *SetConfig          `json:"set_config"`
-	TaskInfo       *TaskInfo           `json:"task_info"`
-	BenefitDisplay [][]*BenefitDisplay `json:"benefit_display"`
-}
-
-type SetConfig struct {
-	FilePath string `json:"file_path"`
-	Age      int    `json:"age"`
-	Total    int    `json:"total"`
-}
-
-type TaskInfo struct {
-	ExecuteTime     string `json:"execute_time"`
-	StartTime       string `json:"start_time"`
-	EndTime         string `json:"end_time"`
-	HistoryFilePath string `json:"history_file_path"`
-}
-
-type BenefitDisplay struct {
-	Name  string  `json:"name"`
-	Value float32 `json:"value"`
-}
+//
+//type InsurancesResFromPython struct {
+//	ErrorMessage string                `json:"error_message"`
+//	ExcelData    *InsurancesFromPython `json:"excel_data"`
+//}
+//
+//type InsurancesFromPython struct {
+//	TaskID         string              `json:"task_id"`
+//	SetInfo        *SetConfig          `json:"set_config"`
+//	TaskInfo       *TaskInfo           `json:"task_info"`
+//	BenefitDisplay [][]*BenefitDisplay `json:"benefit_display"`
+//}
+//
+//type SetConfig struct {
+//	FilePath string `json:"file_path"`
+//	Age      int    `json:"age"`
+//	Total    int    `json:"total"`
+//}
+//
+//type TaskInfo struct {
+//	ExecuteTime     string `json:"execute_time"`
+//	StartTime       string `json:"start_time"`
+//	EndTime         string `json:"end_time"`
+//	HistoryFilePath string `json:"history_file_path"`
+//}
+//
+//type BenefitDisplay struct {
+//	Name  string  `json:"name"`
+//	Value float32 `json:"value"`
+//}
