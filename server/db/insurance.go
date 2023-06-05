@@ -8,6 +8,8 @@ import (
 type ProductExcelParser struct {
 	Id        string    `gorm:"primary_key;column:id" form:"id" json:"id"`
 	ProductId   string  `json:"product_id"`
+	Product    string    `json:"product"`
+	Company    string    `json:"company"`
 	ExcelName  string   `json:"excel_name"` //名称
 	ExcelPath  string   `json:"excel_path"`
 	SetInfo	   string   `json:"set_info"`

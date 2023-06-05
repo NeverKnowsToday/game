@@ -247,7 +247,7 @@ func (op *InsuranceOp)DbpaasRun() error {
 
 
 
-func InsuranceSerial(c * gin.Context, id string) (*InsurancesInfo, error){
+func InsuranceSerial(c * gin.Context, id, age, total string) (*InsurancesInfo, error){
 	logger.Infof(fmt.Sprintf("Insurance serrial start"))
 
 	//id := op.Get().(string)
@@ -305,7 +305,7 @@ func InsuranceSerial(c * gin.Context, id string) (*InsurancesInfo, error){
 	//uid, err := uuid.GenerateUUID()
 
 	//tempPath := strings.TrimRight(excel.ExcelPath, ".xlsx")
-	tempPath := "D:\\app\\gin-backend\\history\\" + excel.ProductId + "_" + excel.ExcelName + ".xlsx"
+	tempPath := "D:\\app\\gin-backend\\history\\" + excel.ProductId + "_" + excel.ExcelName
 	logger.Infof(fmt.Sprintf("tempPath = %s", tempPath))
 
 	logger.Infof(fmt.Sprintf("excel.ExcelPath = %s", excel.ExcelPath))
@@ -318,12 +318,12 @@ func InsuranceSerial(c * gin.Context, id string) (*InsurancesInfo, error){
 		ExcelFileTempPath: tempPath,
 		Set: &Set{
 			Age: &SetBase{
-				Value:    setInfo.Set.Age.Value,
+				Value:    age,
 				Location: setInfo.Set.Age.Location,
 				Sheet:    setInfo.Set.Age.Sheet,
 			},
 			Total: &SetBase{
-				Value:    setInfo.Set.Total.Value,
+				Value:    total,
 				Location: setInfo.Set.Total.Location,
 				Sheet:    setInfo.Set.Total.Sheet,
 			},
