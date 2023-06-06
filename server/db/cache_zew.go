@@ -4,18 +4,20 @@ import (
 	"github.com/game/server/database"
 	"time"
 )
+
+
 //操作表
-type ProductExcelParser struct {
+type CacheZew struct {
 	Id        string    `gorm:"primary_key;column:id" form:"id" json:"id"`
 	ProductId   string  `json:"product_id"`
-	Product    string    `json:"product"`
-	CompanyId  string    `json:"company_id"`
-	Company    string    `json:"company"`
-	ExcelName  string   `json:"excel_name"` //名称
-	ExcelPath  string   `json:"excel_path"`
-	SetInfo	   string   `json:"set_info"`
-	GetInfo    string   `json:"get_info"`
-	Status     string   `json:"status"`
+	CompanyID    string    `json:"company_id"`
+	Age        string   `json:"age"`
+	Sex        string   `json:"sex"`
+	Total      string   `json:"total"`
+	Period     string   `json:"period"`
+	Hash       string   `json:"hash"`
+    ExcelResult string  `json:"excel_result"`
+	Deleted    int      `json:"deleted"`
 	Created time.Time `json:"created"`
 	Updated time.Time `json:"updated"`
 }
@@ -24,26 +26,26 @@ type ProductExcelParser struct {
 //	return database.Model(Db, &Invoke{}).CheckExist("\"name\" = ?", name)
 //}
 
-//func InsertInvoke(invoke *Invoke) error {
-//	return database.InsertAndGetDb(Db, invoke)
-//}
-
-func GetProductExcelParsers() ([]*ProductExcelParser, error) {
-	var productExcelParser []*ProductExcelParser
-	err := database.Model(Db, &ProductExcelParser{}).Find(&productExcelParser)
-	if err != nil {
-		return nil, err
-	}
-	return productExcelParser, nil
+func InsertCacheZew(cacheZew *CacheZew) error {
+	return database.InsertDb(Db, cacheZew)
 }
 
-func GetProductExcelParserByID(productID string) (*ProductExcelParser, error) {
-	productExcelParser := new(ProductExcelParser)
-	err := database.Model(Db, &ProductExcelParser{}).FilterBy("product_id", productID).Find(&productExcelParser)
+//func GetProductExcelParsers() ([]*ProductExcelParser, error) {
+//	var productExcelParser []*ProductExcelParser
+//	err := database.Model(Db, &ProductExcelParser{}).Find(&productExcelParser)
+//	if err != nil {
+//		return nil, err
+//	}
+//	return productExcelParser, nil
+//}
+
+func GetCacheZewByHash(hash string) (*CacheZew, error) {
+	cacheZew := new(CacheZew)
+	err := database.Model(Db, &CacheZew{}).FilterBy("hash", hash).Find(&cacheZew)
 	if err != nil {
 		return nil, err
 	}
-	return productExcelParser, nil
+	return cacheZew, nil
 }
 
 //func GetInvokeByName(name string) (*Invoke, error) {

@@ -27,13 +27,15 @@ func InsuranceCompare(c *gin.Context) {
 	insuranceInfo := task.InsuranceInfo{
 		Age: insuranceRes.Age,
 		Total: insuranceRes.Total,
+		Sex: insuranceRes.Sex,
+		Period: insuranceRes.Period,
 		ProductID: insuranceRes.ProductID,
 	}
 
 	latestRes := make([]*task.InsurancesInfo, 0)
     for _, id:= range insuranceInfo.ProductID {
 		//tmpInsurancesInfo := &task.InsurancesInfo{}
-		taskInsurancesInfo, err := task.InsuranceSerial(c,id, insuranceRes.Age, insuranceRes.Total)
+		taskInsurancesInfo, err := task.InsuranceSerial(c,id, insuranceRes.Age, insuranceRes.Total, insuranceInfo.Sex,insuranceInfo.Period)
 		if err != nil {
 			logger.Infof(fmt.Sprintf("err := InsuranceSerial %s", err.Error()))
 			common.ErrorResponse(c, "1111", fmt.Sprintf("eInsuranceSerial err = %s", err.Error()) )

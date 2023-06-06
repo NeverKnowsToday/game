@@ -10,16 +10,18 @@ var logger = logging.GetLogger("handler", logging.DEFAULT_LEVEL)
 
 type InsuranceInfo struct {
 	Age       string   `json:"age"`
+	Sex       string   `json:"sex"`
+	Period    string   `json:"period"`
 	Total     string   `json:"total"`
 	ProductID []string `json:"product_id"`
 }
 
 
-type InsuranceRes struct {
-	Age       string   `json:"age"`
-	Total     string   `json:"total"`
-	ProductID []string `json:"product_id"`
-}
+//type InsuranceRes struct {
+//	Age       string   `json:"age"`
+//	Total     string   `json:"total"`
+//	ProductID []string `json:"product_id"`
+//}
 
 
 type ExcelInsurance struct {
@@ -79,10 +81,14 @@ type ExcelInsurance struct {
 // 减保后保单年度末现金价值
 
 type InsurancesInfo struct {
-	ID          string
-	Info        []*ExcelInsurance
-	CompanyName string
-	ProductName string
+	ID          string	`json:"id"`
+	Info        []*BenefitDisplay `json:"info"`
+	CompanyName string  `json:"company_name"`
+	ProductName string	`json:"product_name"`
+	Age         string  `json:"age"`
+	Sex         string  `json:"sex"`
+	Total       string  `json:"total"`
+	Period      string  `json:"period"`
 }
 
 type InputConfig struct {
@@ -101,6 +107,8 @@ type SetInfo struct {
 type Set struct {
 	Age   *SetBase `json:"age"`
 	Total *SetBase `json:"total"`
+	Sex   *SetBase `json:"sex"`
+	Period *SetBase `json:"period"`
 }
 
 type SetBase struct {
@@ -116,10 +124,11 @@ type GetInfo struct {
 }
 
 type Get struct {
-	BenefitDiff *BenefitDiff `json:"benefit_diff"`
+	BenefitDiff []*BenefitDiff `json:"benefit_diff"`
 }
 
 type BenefitDiff struct {
+	Name string `json:"name"`
 	Location string `json:"location"`
 	Sheet    string `json:"sheet"`
 }
@@ -157,7 +166,7 @@ type InsurancesFromPython struct {
 	TaskID         string              `json:"task_id"`
 	SetInfo        *SetConfig          `json:"set_config"`
 	TaskInfo       *TaskInfo           `json:"task_info"`
-	BenefitDisplay [][]*BenefitDisplay `json:"benefit_display"`
+	BenefitDisplay []*BenefitDisplay `json:"benefit_display"`
 }
 
 type SetConfig struct {
@@ -175,5 +184,7 @@ type TaskInfo struct {
 
 type BenefitDisplay struct {
 	Name  string  `json:"name"`
-	Value float32 `json:"value"`
+	Values []float32 `json:"values"`
+	LableAge []string `json:"lable_age"`
+	LableMutiple []string `json:"lable_mutiple"`
 }
