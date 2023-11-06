@@ -17,7 +17,7 @@ func InitDb() error {
 	host := dbInfo.Address
 	port := dbInfo.Port
 	dbuser := dbInfo.User
-	dbname := "game"
+	dbname := "baoxian"
 	password := dbInfo.Password
 	Type := dbInfo.Type
 	Db, err = database.OpenDatabase(port, host, dbuser, dbname, password, Type)

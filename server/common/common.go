@@ -116,6 +116,7 @@ func Response(c *gin.Context, err error, errCode string, data interface{}) {
 	ret, _ := json.Marshal(resp)
 	c.Writer.Write(ret)
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	c.Writer.Header().Set("Content-Type","application/json")
 }
 
 //response for details
